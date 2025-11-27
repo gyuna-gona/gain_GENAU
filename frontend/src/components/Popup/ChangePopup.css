@@ -1,0 +1,88 @@
+/* ChangePopup.css */
+
+.popup-dim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-box {
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    border-radius: 12px;
+    padding: 24px 20px 32px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  .popup-box h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .popup-box input {
+    padding: 10px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+  }
+  
+  .popup-box button {
+    padding: 10px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #7A86D8;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .popup-box button:hover {
+    background-color: #5e67b0;
+  }
+  
+  .popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent; /* ✅ 배경 제거 */
+    border: none;             /* ✅ 테두리 제거 */
+    padding: 0;               /* ✅ 여백 제거 */
+    margin: 0;
+    color: #555;              /* 원하는 색상 */
+    cursor: pointer;
+    line-height: 1;
+  }
+  
+  .popup-close:hover {
+    background: transparent;  /* ✅ hover 시에도 배경 없음 */
+    color: #000;
+  }
+  
+  .errorMessageWrap {
+    margin-top: -10px;
+    color: red;
+    font-size: 0.9rem;
+    margin-left: -100px;
+  }
+
+  .errorMessageWrap2 {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -10px;
+    text-align: left;
+  }
+  
+  

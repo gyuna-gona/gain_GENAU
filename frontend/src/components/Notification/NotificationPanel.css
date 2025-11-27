@@ -1,0 +1,78 @@
+.bell-icon {
+    cursor: pointer;
+  }
+  
+  .noti-panel {
+    position: fixed;
+    top: 60px;
+    right: 2vw;
+    width: 300px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    z-index: 50;
+  }
+  
+  /* 바깥 영역 클릭 감지용 */
+.noti-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: transparent;
+  }
+  
+  /* 기존 noti-panel 수정 필요 없음 */
+  .noti-header {
+    display: flex;
+    justify-content: space-between; /* 제목 왼쪽, 버튼 오른쪽 */
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .noti-loading,
+  .noti-error,
+  .noti-empty {
+    padding: 16px;
+    text-align: center;
+    color: #666;
+  }
+  
+  .noti-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 300px; /* 알림 리스트 영역만 스크롤 */
+  }
+  
+  .noti-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+  }
+  .noti-title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .btn-mark-all {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #007bff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 900;
+  }
+  .btn-mark-all:disabled {
+    color: #ccc;
+    cursor: default;
+  }
+  .btn-mark-all:hover:not(:disabled) {
+    text-decoration: underline;
+  }

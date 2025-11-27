@@ -1,0 +1,514 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.detail-title{
+  font-weight: bold;
+  font-size: 1vw;
+}
+
+.detail-todo-popup {
+  background: white;
+  padding: 1vw 2vw;
+  border-radius: 1vw;
+  width: 80%;
+  max-width: 400px;
+  min-width: 280px;
+  box-shadow: 0 0.8vw 2vw rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vw;
+  height: auto;    
+  overflow-y: visible;
+  z-index: 100000 !important;
+  font-family: sans-serif;
+}
+
+
+
+/* ===== 상단 정보 영역 ===== */
+.container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: -0.2vw;
+}
+
+.left > div {
+  display: flex;
+  font-size: 0.9vw;
+  align-items: center;
+  gap: 0.4vw;
+  margin: 0.3vw 0;
+}
+
+.detail-icon {
+  font-size: 1.2vw;
+  line-height: 1;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ===== 기본 텍스트 ===== */
+.detail-title {
+  font-weight: bold;
+  margin-bottom: 0.3vw;
+}
+
+.detail-todo-popup h3 {
+  align-self: flex-start;
+  font-size: 1.2vw;
+}
+
+/* 권한 없는 사용자용 닫기 버튼 전체 너비 */
+.full-width {
+  width: 100%;
+}
+
+/* ===== 할 일 설명 ===== */
+.detail-todo-content {
+  width: 100%;
+  max-width: 300px;
+  min-height: 6vw;
+  max-height: 10vh;
+  box-sizing: border-box;
+  padding: 0.6vw;
+  border: 1px solid #ccc;
+  border-radius: 0.6vw;
+  font-size: 0.9vw;
+  background: #fff;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+/* ===== 상태 태그 ===== */
+.status-tag {
+  display: inline-block;
+  padding: 0.2vw 0.4vw;
+  border-radius: 0.5vw;
+  font-weight: bold;
+  color: #fff;
+  font-size: 0.8vw;
+}
+
+.status-tag.completed {
+  background-color: #18e848;
+}
+
+.status-tag.pending {
+  background-color: #ff3c00;
+}
+
+/* ===== 팀명 표시 ===== */
+.team-category {
+  font-size: 1vw;
+  color: #888;
+  margin-bottom: 0.3vw;
+  margin-top: -0.5vw;
+}
+
+/* ===== 파일 영역 ===== */
+.file-title {
+  font-size: 0.8vw;
+}
+
+.file-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.file-name {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  font-size: 0.9vw;
+  color: #333;
+  word-break: break-all;
+}
+
+.file-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.icon-download,
+.icon-delete {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.icon-download {
+  color: #444;
+}
+
+.icon-delete {
+  color: #d33;
+}
+
+.file-submit-title{
+  font-size: 1.1vw;
+}
+
+.file-title{
+  font-size: 0.9vw;
+  margin-top: -0.5vw;
+  margin-bottom: -0.3vw;
+}
+
+/* ===== 게이지 ===== */
+.format-check-inline {
+  display: flex;               
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.4vw;
+}
+
+.conversion-bar {
+  width: 4vw;
+  height: 0.45vw;
+  background-color: #eee;
+  border-radius: 0.5vw;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+  flex-shrink: 0; 
+}
+
+.conversion-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #00c12d 0%, #019223 100%);
+  border-radius: 0.5vw;
+  transition: width 0.15s linear;
+}
+
+/* ===== 파일 업로드 미리보기 ===== */
+.upload-preview {
+  position: relative;          
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2vw;
+  font-size: 0.95vw;
+  margin-top: 0.6vw;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 2.5vw;     
+}
+
+.upload-preview span:first-child {
+  max-width: 9vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 승인 + X버튼 묶음 */
+.approval-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4vw;
+  margin-left: 0.2vw;
+  flex-shrink: 0;
+}
+
+/* 승인 표시 */
+.approval-group .approved {
+  font-size: 0.8vw;
+  font-weight: 600;
+  color: #00c12d;
+  background-color: #e3f7e9;
+  border-radius: 0.4vw;
+  padding: 0.15vw 0.5vw;
+  white-space: nowrap;
+}
+
+/* X 버튼 (항상 닫기 버튼과 수직 정렬 고정) */
+.file-remove {
+  position: absolute;
+  right: -0.7vw;                    
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9vw;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.file-remove:hover {
+  color: #000;
+}
+
+/* ===== 파일명만 생략 처리 (요구사항 정확히 충족) ===== */
+.upload-preview span:nth-of-type(2) {
+  max-width: 9vw;          /* ← 너 원하는 너비 px, vw, %로 설정 가능 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* ===== 변환 상태 ===== */
+.converting-status {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* ===== 메시지 ===== */
+.message.error {
+  color: #d33;
+}
+
+.message.success {
+  color: #2e7d32;
+}
+
+/* ===== 버튼 그룹 ===== */
+.popup-buttons {
+  display: flex;
+  gap: 0.8vw;
+  margin-top: 1.5vw;
+  justify-content: flex-end;
+}
+
+.popup-buttons button {
+  flex: 1;
+  padding: 0.8vw 0;
+  border-radius: 0.5vw;
+  font-size: 0.9vw;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+/* 취소 / 제출 버튼 */
+.btn-cancel {
+  background-color: #f0f0f0 !important;
+  color: #333 !important;
+  border: 1px solid #ccc;
+}
+
+.btn-cancel:hover {
+  background-color: #d2d2d2 !important;
+}
+
+.btn-submit {
+  background-color: #7a86d8 !important;
+  color: white !important;
+}
+
+.btn-submit:hover {
+  background-color: #5d65ad !important;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 1200px) {
+  .detail-todo-popup {
+  width: 80%;
+  max-width: 350px;
+  min-width: 280px;
+}
+  .form-row {
+    flex-direction: column;
+  }
+
+.detail-todo-content {
+  max-width: 280px;
+  min-height: 6vw;
+  max-height: 10vh;
+  font-size: 0.9vw;
+}
+.popup-buttons button {
+  padding: 0.8vw 0vw!important;
+}
+}
+
+@media (max-width: 1024px) {
+  .detail-todo-popup {
+  width: 80%;
+  max-width: 320px;
+  min-width: 280px;
+}
+  .form-row {
+    flex-direction: column;
+  }
+
+.detail-todo-content {
+  max-width: 280px;
+  min-height: 6vw;
+  max-height: 10vh;
+  font-size: 0.9vw;
+}
+.popup-buttons button {
+  padding: 0.8vw 0vw!important;
+}
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 900px) {
+   .detail-todo-popup {
+    width: 80%;
+    max-width: 330px;
+  }
+
+  .detail-todo-popup h3 {
+    font-size: 2vw;
+  }
+
+.detail-todo-content {
+  max-width: 280px;
+  min-height: 8vw;
+  max-height: 12vh;
+  font-size: 1.2vw;
+}
+.detail-title{
+  font-size: 1.3vw;
+}
+.left > div {
+  font-size: 1.4vw;
+}
+
+.detail-icon {
+  font-size: 1.5vw;
+}
+.team-category {
+  font-size: 1.5vw;
+  margin-top:-6px;
+}
+.status-tag {
+  font-size: 1.3vw;
+  border-radius: 6px;
+}
+.file-title {
+  font-size: 1.5vw;
+}
+.file-name {
+  font-size: 1.2vw;
+}
+.file-submit-title{
+  font-size: 1.6vw;
+}
+.upload-preview {
+  font-size: 1.6vw;      
+}
+.icon-download,
+.icon-delete {
+  font-size: 15px;
+}
+
+.approval-group .approved {
+  font-size: 1vw;
+  border-radius: 0.8vw;
+  padding: 0.2vw 0.6vw;
+}
+
+.file-remove {
+  font-size: 1.3vw; 
+}
+.upload-preview {
+  font-size: 1.2vw;   
+}
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 720px) {
+   .detail-todo-popup {
+    width: 80%;
+    max-width: 290px;
+  }
+
+  .detail-todo-popup h3 {
+    font-size: 2.2vw;
+  }
+
+  .popup-buttons button {
+  padding: 1vw 0vw!important;
+  border-radius:5px!important;
+}
+.detail-todo-content {
+  max-width: 280px;
+  min-height: 9vw;
+  max-height: 15vh;
+  font-size: 1.4vw;
+}
+.detail-title{
+  font-size: 1.4vw;
+}
+.left > div {
+  font-size: 1.5vw;
+}
+
+.detail-icon {
+  font-size: 1.2vw;
+  line-height: 1;
+}
+.team-category {
+  font-size: 1.5vw;
+  margin-top:-6px;
+}
+.status-tag {
+  font-size: 1.5vw;
+  border-radius: 6px;
+}
+.file-title {
+  font-size: 1.5vw;
+}
+.file-name {
+  font-size: 1.2vw;
+}
+.file-submit-title{
+  font-size: 1.6vw;
+}
+.upload-preview {
+  font-size: 1.6vw;      
+}
+.icon-download,
+.icon-delete {
+  font-size: 15px;
+}
+.approval-group .approved {
+  font-size: 1.4vw;
+  border-radius: 0.8vw;
+  padding: 0.2vw 0.6vw;
+}
+.file-remove {
+  font-size: 1.3vw; 
+}
+}

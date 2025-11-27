@@ -1,0 +1,244 @@
+button:focus,
+button:active {
+  outline: none !important;
+  border: none !important;
+}
+
+.mypage-root {
+  min-height: 100vh;
+  background: #f6f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(80,120,200,0.09);
+  width: 100%;
+  max-width: 640px;
+  padding: 36px 36px 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.mypage-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.mypage-title {
+  font-size: 1.32rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+.mypage-close {
+  border: none!important;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.13s;
+}
+.mypage-close:hover {
+  color: #9797979c;
+}
+
+.close-icon {
+  font-size: 28px;  /* 아이콘 크기 */
+  width: 28px;
+  height: 28px;
+  pointer-events: none; /* 클릭 영역이 줄어드는 문제 방지 */
+}
+
+  .mypage-close:focus,
+  .mypage-close:active,
+  .mypage-close:focus-visible {
+  outline: none !important;
+  border: none !important;
+}
+  
+
+/* 프로필/이름/이메일/버튼 가로 배치 */
+.mypage-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 10px;
+}
+
+
+.mypage-profile-img-wrap {
+  flex-shrink: 0;
+}
+
+.mypage-profile-img {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: white;
+  border: 3px solid #f6f7fa;
+}
+
+.mypage-profile-maininfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 0;
+}
+
+.mypage-profile-name {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #23255a;
+}
+
+.mypage-profile-email {
+  font-size: 0.97rem;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.mypage-profile-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+
+/* 버튼 스타일 (테두리 없음, 호버 강조, 가독성) */
+.mypage-profile-edit,
+.mypage-edit-btn,
+.mypage-password-btn {
+  background: #7A86D8;
+  color: white;
+  font-size: 1rem;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 4px;
+  transition: background 0.13s, color 0.13s;
+  outline: none;
+}
+.mypage-profile-edit:hover,
+.mypage-edit-btn:hover,
+.mypage-password-btn:hover {
+  background: #6873b7;
+  color: #fff;
+}
+
+/* 삭제/탈퇴/로그아웃 버튼 - 가독성 및 구분 강화 */
+.mypage-profile-edit.delete {
+  background: #ffeaea;
+  color: #ff4d4d;
+  font-weight: 600;
+}
+.mypage-profile-edit.delete:hover {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+.mypage-manage-section {
+  display: flex;
+  gap: 14px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* 로그아웃 버튼: 보라색 계열, 흰색 글씨 */
+.mypage-logout-btn {
+  background: #7a86d8;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+  box-shadow: 0 2px 8px rgba(122,134,216,0.05);
+}
+.mypage-logout-btn:hover {
+  background: #5d65ad;
+  color: #fff;
+}
+
+/* 회원탈퇴 버튼: 주황-빨강 계열, 흰색 글씨 */
+.mypage-withdraw-btn {
+  background: #ff6b57;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+  box-shadow: 0 2px 8px rgba(255,107,87,0.07);
+}
+.mypage-withdraw-btn:hover {
+  background: #d60000;
+  color: #fff;
+}
+
+.mypage-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-bottom: 1px solid #f0f1f4;
+  padding-bottom: 18px;
+}
+
+.mypage-info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid #f8f8fa;
+}
+.mypage-info-row:first-child {
+  border-top: none;
+}
+.mypage-info-label {
+  flex: 0 0 70px;
+  font-weight: 700;
+  color: #333;
+  font-size: 0.97rem;
+}
+.mypage-info-value {
+  flex: 1 1 auto;
+  color: #555;
+  font-size: 0.97rem;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+@media (max-width: 768px) {
+  .mypage-card {
+    max-width: 90vw;
+    
+  }
+  
+}

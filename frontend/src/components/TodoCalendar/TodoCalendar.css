@@ -1,0 +1,107 @@
+.todo-calendar {
+  margin-top: 0.5vw;
+}
+
+.todo-calendar .react-calendar {
+  width: 43vw;
+  z-index: 10;
+  font-size: 1.13rem;
+}
+
+.todo-calendar .react-calendar__month-view__days__day,
+.todo-calendar .react-calendar__tile {
+  height: 88px;
+  font-size: 1.07rem;
+  padding: 0 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.todo-calendar .react-calendar__tile--active {
+  background: #7A86D8 !important;
+  color: #fff !important;
+}
+
+.todo-calendar .react-calendar__tile--now {
+  background: rgba(122, 134, 216, 0.2);
+}
+
+.todo-calendar .react-calendar__tile--now:hover,
+.todo-calendar .react-calendar__tile:hover {
+  background: #eee;
+}
+
+/* 이벤트 리스트, 아이템 */
+.calendar-event-list {
+  max-height: 72px; /* 날짜 칸 내 최대 높이 */
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  scrollbar-width: none; /* 파이어폭스 */
+  -ms-overflow-style: none; /* IE, Edge */
+}
+.calendar-event-list::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리 */
+}
+
+
+
+.calendar-event-item {
+  font-size: 0.95rem;
+  min-height: 30px;
+  padding: 2px 8px 2px 6px;
+  border-radius: 7px;
+  margin-bottom: 3px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  text-align: left;
+}
+
+.calendar-event-item.completed .event-title {
+  color: #b0b0b0;
+  text-decoration: line-through;
+}
+
+.calendar-event-item.completed {
+  opacity: 0.7;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .todo-calendar .react-calendar {
+    width: 90vw;
+    font-size: 0.95rem;
+  }
+  .todo-calendar .react-calendar__month-view__days__day,
+  .todo-calendar .react-calendar__tile {
+    height: 13vw;
+    font-size: 0.88rem;
+  }
+  .calendar-event-item {
+    font-size: 0.75rem;
+    min-height: 18px;
+    padding: 1px 4px 1px 3px;
+  }
+  .calendar-event-list {
+    max-height: 11vw;
+  }
+}
+
+
+

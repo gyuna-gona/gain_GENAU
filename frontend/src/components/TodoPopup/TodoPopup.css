@@ -1,0 +1,393 @@
+/* 팝업 컨테이너 */
+.todo-popup {
+  background: white;
+  padding: 1vw 2vw;
+  border-radius: 1vw;
+  width: 90%;
+  max-width: 480px;
+  min-width: 420px!important;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0.8vw 2vw rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vw;
+  height: auto;
+  z-index: 100000 !important;
+}
+
+/* 제목 왼쪽 정렬 */
+.todo-popup h3 {
+  align-self: flex-start;
+  font-size: 1.4vw;
+  margin-bottom: 0.5vw;
+}
+
+/* 입력/텍스트/셀렉트 공통 */
+.todo-popup input,
+.todo-popup textarea,
+.todo-popup select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6vw;
+  border: 1px solid #ccc;
+  border-radius: 0.6vw;
+  font-size: 0.9vw;
+  font-family: inherit;
+  background: #fff;
+  resize: none;
+  min-width: 0;    
+}
+
+.todo-popup textarea {
+  height: 7vw;
+}
+
+.todo-popup select {
+  appearance: none;
+}
+
+.todo-popup input[type="date"] {
+  color: #333;
+}
+
+/* 한 줄에 2개 배치 */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8vw;
+  width: 100%;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4vw;
+}
+
+.form-group.half {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 버튼 컨테이너 */
+.popup-buttons {
+  display: flex;
+  gap: 0.8vw;
+  margin-top: 0.8vw;
+}
+
+/* 버튼 기본 스타일 */
+.popup-buttons button {
+  flex: 1;
+  padding: 0.8vw 0;
+  border-radius: 0.5vw;
+  font-size: 0.9vw;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+/* 버튼 색상 */
+.todo-popup .popup-buttons .btn-cancel {
+  background-color: #f0f0f0 !important;
+  color: #333 !important;
+  border: 1px solid #ccc;
+}
+
+.todo-popup .popup-buttons .btn-cancel:hover {
+  background-color: #d2d2d2 !important;
+}
+
+.todo-popup .popup-buttons .btn-submit {
+  background-color: #7a86d8 !important;
+  color: white !important;
+}
+
+.todo-popup .popup-buttons .btn-submit:hover {
+  background-color: #5d65ad !important;
+}
+
+/* 파일/내용 스타일 */
+.todo-popup .file-info {
+  display: flex;
+  align-items: center;
+}
+
+.todo-popup .file-name {
+  font-size: 0.9vw;
+  color: #333;
+  margin-right: 0.8vw;
+  word-break: break-all;
+}
+
+.todo-popup .download-link {
+  display: inline-block;
+  padding: 0.3vw 0.6vw;
+  border: 1px solid #7a86d8;
+  border-radius: 0.4vw;
+  background-color: #fff;
+  color: #7a86d8;
+  text-decoration: none;
+  font-size: 0.8vw;
+}
+
+.todo-popup .download-link:hover {
+  background-color: #5d65ad;
+  color: #fff;
+}
+
+.todo-popup .todo-content {
+  font-size: 0.9vw;
+  color: #555;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* === 담당자 커스텀 드롭다운 === */
+.assignee-dropdown-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6vw;
+  border: 1px solid #ccc;
+  border-radius: 0.6vw;
+  font-size: 0.9vw;
+  font-family: inherit;
+  background-color: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* 선택된 이름 줄바꿈 방지 */
+.assignee-dropdown-toggle span {
+  font-size: 0.9vw;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ▼ 아이콘 */
+.assignee-dropdown-toggle::after {
+  content: '▼';
+  font-size: 0.7vw;
+  color: #888;
+  margin-left: 0.6vw;
+}
+
+/* 드롭다운 열림 효과 */
+.assignee-dropdown-toggle.open {
+  border-color: #000;
+}
+
+.assignee-dropdown-toggle.open::after {
+  transform: rotate(180deg);
+  color: #000;
+}
+
+/* === 드롭다운 메뉴 (핵심 수정) === */
+.assignee-dropdown-menu {
+  position: absolute;
+  width: 100%;
+  margin-top: 0.2vw;
+  border: 1px solid #ccc;
+  border-radius: 0.6vw;
+  background: #fff;
+  font-size: 0.9vw;
+  box-shadow: 0 0.4vw 1vw rgba(0, 0, 0, 0.1);
+  z-index: 100002;
+
+  /*3개까지만 보이기 */
+  max-height: calc(3 * 2.4em); /* 약 3개 항목 기준 */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: #bbb #f5f5f5;
+}
+
+/* Chrome/Edge용 스크롤바 */
+.assignee-dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.assignee-dropdown-menu::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.assignee-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 8px;
+}
+
+.assignee-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* 항목 스타일 */
+.assignee-dropdown-menu div {
+  padding: 0.6vw 0.8vw;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+  background-color: transparent;
+}
+
+/* 선택된 항목 */
+.assignee-dropdown-menu div.selected {
+  background-color: #cce5ff;
+  color: #004085;
+  font-weight: 500;
+}
+
+/* 1200px 이하에서 세로 깨짐 방지 */
+@media (max-width: 1200px) {
+  .todo-popup .form-row {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+}
+
+/* 내부 칸이 너무 얇아지지 않게 최소 너비 설정 */
+.todo-popup .form-group.half {
+  flex: 1;
+  min-width: 200px;   /* ★ 최소 읽기 가능한 폭 */
+}
+
+/* 내부 input/select가 자연스럽게 줄어들되 너무 얇아지지 않게 */
+.todo-popup input,
+.todo-popup select,
+.todo-popup textarea {
+  min-width: 120px;   /* ★ 컴포넌트 내부 최소폭 */
+}
+
+/* 1200px 이하 */
+@media (max-width: 1200px) {
+.todo-popup {
+  padding: 1vw 2vw;
+  width: 90%;
+  width: 430px;
+  max-height: 90vh;
+  gap: 0.5vw;
+}
+
+  /* 입력창 최소 높이 확보 */
+  .todo-popup input,
+  .todo-popup select {
+    min-height: 35px;
+    height: 35px;
+    font-size: 1vw;
+    width: 185px;
+  }
+
+  .todo-popup textarea{
+    height: 80px;
+    font-size: 1vw;
+    width: 385px;
+  }
+
+  .assignee-dropdown-toggle {
+    min-height: 35px;
+    height: 35px;
+    font-size: 1vw;
+    width: 185px;
+  }
+
+  .form-row {
+    gap: 0;
+  }
+  .todo-popup h3 {
+  font-size: 1.5vw;
+}
+}
+
+/* 1024px 이하 */
+@media (max-width: 1024px) {
+  .todo-popup {
+    width: 420px!important;
+    padding: 15px;
+  }
+
+  .todo-popup .form-row {
+    gap: 0;
+  }
+
+  /* 입력칸 너비 좀 줄이기 */
+  .todo-popup input,
+  .todo-popup select {
+    width: 185px;
+  }
+
+   .assignee-dropdown-toggle {
+    width: 185px;
+  }
+  .todo-popup textarea{
+    width: 385px;
+    padding: 7px;
+  }
+
+.todo-popup h3 {
+  font-size: 1.8vw;
+}
+.form-group.half {
+  font-size: 1.4vw;
+}
+}
+
+/* 768px 이하 */
+@media (max-width: 768px) {
+  .todo-popup h3 {
+  font-size: 2.5vw;
+}
+
+  /* form-row가 너무 붙지 않도록 */
+  .todo-popup .form-row {
+    gap: 14px;
+  }
+
+  /* input/textarea 전체 비율 안정화 */
+  .todo-popup input,
+  .todo-popup select {
+    max-width: 200px;
+    height: 25px;
+    font-size: 1.6vw;
+    padding: 0px 5px;
+  }
+
+  .todo-popup textarea{
+    font-size: 1.6vw;
+  }
+
+  .todo-popup .form-group.half {
+    min-width: 150px;
+  }
+
+  .assignee-dropdown-toggle {
+  font-size: 1.6vw;
+}
+.assignee-dropdown-toggle::after {
+  font-size: 1.6vw;
+}
+.assignee-dropdown-menu {
+  font-size: 1.6vw; 
+}
+/* 버튼 기본 스타일 */
+.popup-buttons button {
+  font-size: 2.2vw!important;
+}
+.form-group.half {
+  font-size: 1.8vw;
+}
+}
+
+

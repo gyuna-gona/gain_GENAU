@@ -1,0 +1,242 @@
+/* 어두운 배경 */
+.invite-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 6;
+}
+
+/* 하얀 팝업 카드 */
+.invite-box {
+  width: 30vw;
+  max-width: 480px;
+  min-width: 280px;
+  background: #fff;
+  border-radius: 1.2vw;
+  padding: 3vw 3.5vw;
+  box-shadow: 0 0.8vw 1.6vw rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 2vw;
+  position: relative;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+}
+
+.invite-close {
+  position: absolute;
+  top: 0.8vw;
+  right: 0.8vw;
+  width: 2vw;
+  height: 2vw;
+  min-width: 28px;
+  min-height: 28px;
+  background: transparent;
+  font-size: 1.4vw;
+  font-weight: 700;
+  color: #555;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  line-height: 1;
+  padding: 0;
+  overflow: visible; 
+}
+
+.invite-close,
+.invite-close:focus,
+.invite-close:active,
+.invite-close:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  background: transparent !important;
+}
+
+
+.invite-close:hover {
+  color: #b8b7b7;
+}
+
+/* 제목 */
+.invite-title {
+  font-size: 1.35vw;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.invite-title .tn {
+  color: #7A86D8;
+}
+
+/* 입력란 + 에러메시지 래퍼 */
+.invite-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 입력란 */
+.invite-input {
+  width: 100%;
+  max-width: 23vw;
+  padding: 0.9vw 1vw;
+  font-size: 1.1vw;
+  border: 2px solid #ccc;
+  border-radius: 0.6vw;
+  box-sizing: border-box;
+}
+.invite-input:focus {
+  outline: none;
+  border-color: #7A86D8;
+}
+
+/* 이메일 유효성 오류 메시지 */
+.invite-error {
+  width: 100%;
+  max-width: 23vw;
+  font-size: 0.95vw;
+  color: #d93025;
+  text-align: left;
+  padding-left: 0.2vw;   /* 입력란의 padding-left와 동일하게 */
+  box-sizing: border-box;
+  margin-top: 0.4vw;
+}
+
+/* 전송 버튼 */
+.invite-submit {
+  align-self: flex-end;
+  margin-top: 0.6vw;
+  background: linear-gradient(135deg, #D5D7E2 0%, #8A94DA 100%);
+  color: #fff;
+  border: transparent;
+  border-radius: 0.8vw;
+  padding: 0.8vw 2.8vw;
+  font-size: 1.1vw;
+  font-weight: 600; 
+  cursor: pointer;
+}
+.invite-submit:hover {
+  opacity: 0.9;
+}
+
+
+.invite-submit:focus,
+.invite-submit:active,
+.invite-submit:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+
+/* 성공 메시지 */
+.invite-alert {
+  font-size: 1vw;
+  color: #444;
+  white-space: pre-line;
+  margin-top: -0.6vw;
+  text-align: center;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .invite-box {
+    width: 35vw;
+    padding: 2.5vw 3vw;
+    gap: 4vw;
+  }
+  .invite-title {
+    font-size: 1.7vw;
+  }
+  .invite-input {
+    font-size: 1vw;
+    padding: 1vw;
+    max-width: 38vw;
+  }
+  .invite-error {
+    font-size: 1.3vw;
+    max-width: 38vw;
+  }
+  .invite-submit {
+    font-size: 1.8vw;
+    padding: 1.8vw 3.5vw;
+  }
+  .invite-close {
+    font-size: 2vw;
+  }
+  .invite-submit {
+    font-size: 1.3vw;
+    padding: 0.8vw 2.3vw;
+}
+}
+
+@media (max-width: 768px) {
+  .invite-box {
+    width: 35vw;
+    padding: 2.5vw 3vw;
+    gap: 4vw;
+  }
+  .invite-title {
+    font-size: 1.7vw;
+  }
+  .invite-input {
+    font-size: 1vw;
+    padding: 1vw;
+    max-width: 38vw;
+  }
+  .invite-error {
+    font-size: 1.3vw;
+    max-width: 38vw;
+  }
+  .invite-submit {
+    font-size: 1.8vw;
+    padding: 1.8vw 3.5vw;
+  }
+  .invite-close {
+    font-size: 2vw;
+  }
+  .invite-submit {
+    font-size: 1.3vw;
+    padding: 0.8vw 2.3vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .invite-box {
+    width: 27vw;
+    padding: 2vw 2.5vw;
+    gap: 4vw;
+  }
+  .invite-title {
+    font-size: 1.7vw;
+  }
+  .invite-input {
+    font-size: 1.5vw;
+    padding: 1vw;
+    max-width: 33vw;
+  }
+  .invite-error {
+    font-size: 1.5vw;
+    max-width: 33vw;
+  }
+  .invite-submit {
+    font-size: 1.8vw;
+    padding: 1.8vw 3.5vw;
+  }
+  .invite-close {
+    font-size: 2.3vw;
+  }
+  .invite-submit {
+    font-size: 1.3vw;
+    padding: 1vw 2.5vw;
+  }
+}
+

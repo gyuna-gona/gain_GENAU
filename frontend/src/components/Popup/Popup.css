@@ -1,0 +1,197 @@
+/* ✅ dim 배경만 추가 */
+.popup-dim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ 팝업 감싸는 최상단 래퍼 (원래대로) */
+.popup-wrapper {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* ✅ 팝업 박스 본체 (원래대로) */
+.popup-container {
+  position: relative; /* 내부 닫기 버튼 우측 상단 배치용 */
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* ✅ 팝업 상단 제목 영역 */
+.popup-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ 팝업 입력 필드 영역 - 좌측 정렬 */
+.popup-content {
+  margin-top: 20px;
+  text-align: left;
+}
+
+/* ✅ 인풋 그룹 묶음 */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 95%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group textarea {
+  resize: vertical;
+  height: 100px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* 제출 버튼 - 좌측 정렬 */
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #7A86D8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+  margin-left: 0;
+}
+
+.submit-btn:hover {
+  background-color: #5f6fc7;
+}
+
+/* 에러 메시지 - 좌측 정렬 */
+.error-msg {
+  color: red;
+  margin-top: 0.4em;
+  font-size: 0.9em;
+  text-align: left;
+  margin-left: 0.2vw;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.close-icon-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #555;
+  cursor: pointer;
+
+  padding: 0;
+  line-height: 1;
+  width: 1.8em;
+  height: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  outline: none;
+}
+
+.close-icon-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.close-icon-btn:hover {
+  color: #222;
+}
+
+
+
+/* 반응형 스타일: 태블릿 */
+@media (max-width: 768px) {
+  .popup-container {
+    width: 65%;
+    padding: 15px;
+  }
+
+  .close-btn-inside {
+    font-size: 1.1em;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    width: 95%;
+  }
+
+  .submit-btn {
+    width: 21%;
+    padding: 12px;
+    max-width: 90px;
+    display: block;
+    margin-left: 0;
+  }
+
+  .error-msg {
+    font-size: 0.8em;
+  }
+}
+
+/* 반응형 스타일: 모바일 */
+@media (max-width: 480px) {
+  .popup-container {
+    width: 85%;
+    padding: 10px;
+  }
+
+  .close-btn-inside {
+    font-size: 1em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    font-size: 0.7em;
+    width: 90%;
+  }
+
+  .submit-btn {
+    padding: 12px;
+    width: 20%;
+    min-width: 75px;
+    display: block;
+    margin-left: 0;
+  }
+
+  .input-group label {
+    font-size: 1em;
+    text-align: left;
+  }
+
+  .error-msg {
+    font-size: 0.7em;
+  }
+}
+

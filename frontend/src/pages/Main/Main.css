@@ -1,0 +1,371 @@
+.main-background {
+  width: 100vw;
+  min-height: 100vh;
+  background: #f0f0f0;
+}
+
+/* 팀 보드 컨테이너*/
+.team-boards-container {
+  padding:0;
+  margin: 0;
+}
+
+.main-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* 팀 보드 그리드: 좌측 정렬, 카드 크기 고정, 공간 가득 채움 */
+.team-boards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  width: 100%;
+  justify-items: start;    /* 각 카드 좌측 정렬 */
+  align-items: start;
+  justify-content: start;  /* 전체 그리드 좌측 정렬 */
+}
+
+.team-board {
+  background: rgb(255, 255, 255);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef !important;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.team-board:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.team-board-header {
+  padding: 16px 20px;
+  background: white !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-board-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.todo-count {
+  font-size: 12px;
+  color: #666;
+  background: #e9ecef;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.team-board-content {
+  padding: 16px 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.board-todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.board-todo-item {
+  background: rgb(247, 245, 245) !important;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid #dee2e6;
+  transition: all 0.2s ease;
+}
+
+.board-todo-item:hover {
+  background: #e8e8e8 !important;
+  transform: translateX(2px);
+}
+
+.todo-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.todo-category {
+  font-size: 11px;
+  color: white !important;
+  background: #666;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.todo-due-date {
+  font-size: 11px;
+  color: white !important;
+  background: #a2a2a2;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.todo-item-content {
+  margin-bottom: 8px;
+}
+
+.board-todo-item .todo-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: black !important;
+  line-height: 1.3;
+}
+
+.board-todo-item .todo-item-description {
+  font-size: 12px;
+  color: black !important;
+  margin: 0;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.todo-item-actions {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-submit-btn {
+  background-color: #7A86D8;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background-color 0.2s ease;
+}
+
+.file-submit-btn:hover {
+  background-color: #6873b7;
+}
+
+.file-uploaded-indicator {
+  font-size: 10px;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.no-teams-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+.file-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.file-upload-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.file-upload-area {
+  margin: 20px 0;
+  padding: 20px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.selected-file {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loading-message, .error-message, .no-todos-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 1.3vw;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+.no-todos-message {
+  color: #28a745;
+}
+
+/* 반응형: 768px 이하 1줄 */
+@media (max-width: 768px) {
+  .team-boards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .team-boards-container {
+    padding: 16px;
+  }
+}
+
+
+/* 반응형*/
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 2vw;
+  }
+  .main-content p {
+    font-size: 1.4vw;
+  }
+
+  .plus-button img {
+    width: 2.2vw;
+    height: 2.2vw;
+  }
+  .loading-message, .error-message, .no-todos-message {
+    font-size: 1.4vw;
+  }
+  .team-boards-container {
+    padding: 5px;
+  }
+
+  .team-boards-grid {
+    grid-template-columns: repeat(2, minmax(230px, 1fr));
+
+  }
+
+  .team-board {
+    width: 100%; 
+  }
+
+   .team-board-header {
+    padding-bottom: 0;
+  }
+
+  .main-title {
+  font-size: 20px;
+}
+
+.team-board-title{
+  font-size: 17.5px;
+}
+  
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.6vw;
+  }
+  .main-content p {
+    font-size: 2.3vw;
+  }
+  .plus-button img {
+    width: 2.5vw;
+    height: 2.5vw;
+  }
+  .loading-message, .error-message, .no-todos-message {
+    font-size: 2.3vw;
+  }
+  .team-boards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .team-boards-container {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 3.5vw;
+  }
+  .main-content p {
+    font-size: 3vw;
+  }
+  .plus-button img {
+    width: 3.5vw;
+    height: 3.5vw;
+  }
+  .loading-message, .error-message, .no-todos-message {
+    font-size: 3vw;
+  }
+  .team-boards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .team-boards-container {
+    padding: 16px;
+  }
+}
+

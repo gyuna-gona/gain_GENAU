@@ -1,0 +1,439 @@
+.sidebar-profile-layout {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: none;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* ----------- 수정됨: top-bar 고정 높이 적용 ----------- */
+.top-bar {
+  width: 100vw;
+
+  /*px로 고정*/
+  height: 60px;
+  min-height: 60px;
+  max-height: 60px;
+
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2vw;
+  box-sizing: border-box;
+}
+
+.menu-icon {
+  width: 2vw;
+  height: 2vw;
+  color: black;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 1vw;
+  display: flex;
+  align-items: center;
+  border-radius: 30%;
+  background: #f4f4fa;
+  border: 1.5px solid #e0e0e0;
+  width: 2.5em;
+  height: 2.5em;
+  justify-content: center;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+.hamburger-btn:hover {
+  background: #e8eafd;
+  border: none;
+}
+
+.top-bar-title {
+  font-size: 1.4vw;
+  font-weight: bold;
+  color: #393e5e;
+  flex: 1;
+  text-align: left;
+  margin-left: 1vw;
+}
+
+.top-bar-icons {
+  display: flex;
+  gap: 1vw;
+  align-items: center;
+}
+
+.top-bar-icon {
+  width: 2.1vw;
+  height: 2.1vw;
+  color: #393e5e;
+  cursor: pointer;
+  transition: color 0.15s;
+  margin-left: 13px;
+}
+
+.top-bar-icon:hover {
+  color: #7A86D8;
+}
+
+/* ----------- 수정됨: 사이드바 영역이 top-bar 아래로 정확히 배치됨 ----------- */
+.sidebar-main-row {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+
+  /* top-bar 높이만큼 내림 */
+  margin-top: 60px;
+
+  /*남은 화면 전체를 정확히 채우도록 */
+  height: calc(100vh - 60px);
+
+  background: #f0f0f0;
+}
+
+.sidebar-bar {
+  width: 18vw;
+  min-width: 180px;
+  height: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 99;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  transition: width 0.3s;
+}
+
+.sidebar-bar-title {
+  font-size: 1.2vw;
+  font-weight: 800;
+  color: #393e5e;
+  padding: 1vw 2vw 0.7vw 2vw;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.3vw;
+  background: none;
+}
+
+.sidebar-bar-item,
+.sidebar-bar-section {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  padding: 0.9vw 2vw;
+  min-height: 3.2vw;
+  font-size: 1.1vw;
+  font-weight: 600;
+  color: #353535;
+  cursor: pointer;
+  margin-bottom: 0.6vw;
+  transition: background 0.18s;
+  background: transparent;
+  position: relative;
+}
+
+.sidebar-bar-item:hover,
+.sidebar-bar-section:hover {
+  background: rgba(122,134,216,0.10);
+}
+
+.sidebar-bar-item.active {
+  background: #393e5e !important;
+  color: #fff;
+}
+
+.sidebar-bar-icon-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-bar-profile-icon {
+  width: 2.1vw;
+  height: 2.1vw;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1vw;
+  font-weight: bold;
+  color: white;
+  border: 1px solid #fff;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.sidebar-bar-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.1vw;
+  font-weight: 600;
+  text-align: left;
+}
+
+.sidebar-bar-section {
+  background: #f4f4fa;
+  color: #393e5e;
+  font-size: 1vw;
+  font-weight: 700;
+  margin-top: 0.7vw;
+  margin-bottom: 0.2vw;
+  justify-content: space-between;
+  cursor: pointer;
+  padding-right: 1.5vw;
+  user-select: none;
+}
+
+.sidebar-bar-section-label {
+  font-size: 1vw;
+}
+
+.sidebar-bar-toggle-arrow {
+  transition: transform 0.2s;
+  margin-left: 0.5vw;
+  font-size: 1vw;
+  color: #7A86D8;
+  display: inline-block;
+}
+.sidebar-bar-toggle-arrow.open {
+  transform: rotate(180deg);
+}
+
+.sidebar-bar-item.plus .sidebar-bar-plus-icon {
+  width: 1.5vw;
+  height: 1.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7A86D8;
+  font-size: 1.4vw;
+  background: #e8eafd;
+}
+
+.profile-scroll-outer {
+  flex: 1 1 0;
+  overflow-y: auto;
+}
+
+.profile-scroll {
+  width: 100%;
+}
+
+.bookmark-shape {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.7vw;
+  height: 4vw;
+  background: #fff;
+  border-radius: 0 2vw 2vw 0;
+  transition: top 0.2s;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: block;
+}
+
+/*메인 배경*/
+.workspace {
+  flex: 1 1 0;
+  min-width: 0;
+  background: transparent;
+  padding: 2vw;
+  overflow-y: auto;
+  transition: width 0.3s;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.workspace.full {
+  width: 100vw;
+  border-left: none;
+  padding: 2vw;
+}
+
+/*메인 콘텐츠 영역*/
+.workspace-inner {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2vw;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0 !important;
+  min-height: auto !important;
+}
+
+.notification-panel-wrap {
+  position: fixed;
+  top: 4vw;
+  right: 2vw;
+  z-index: 200;
+}
+
+.notification-icon-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+
+.notification-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #e74c3c;
+  color: #fff;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 0 2px #fff;
+}
+
+/* 반응형 */
+@media (max-width: 1300px) {
+  .sidebar-bar {
+    width: 25vw;
+    min-width: 300px;
+  }
+  .sidebar-bar-title,
+  .sidebar-bar-label,
+  .sidebar-bar-section-label {
+    font-size: 1.3vw;
+    font-family: sans-serif;
+  }
+  .sidebar-bar-profile-icon {
+    width: 2.8vw;
+    height: 2.8vw;
+    font-size: 1.1vw;
+  }
+
+  .sidebar-bar-item,
+  .sidebar-bar-section {
+    padding: 1vw 1.5vw;
+    min-height: 1.7vw;
+    font-size: 0.7vw;
+  }
+  .top-bar-icon{
+    width: 30px;
+    height: 30px;
+  }
+  .notification-badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 3.5px;
+    font-size: 11px;
+}
+.bookmark-shape {
+  width: 0.7vw;
+  height: 4.5vw;
+}
+}
+
+@media (max-width: 1024px) {
+  .sidebar-bar {
+    width: 24vw;
+    min-width: 120px;
+  }
+  .sidebar-bar-title,
+  .sidebar-bar-label,
+  .sidebar-bar-section-label {
+    font-size: 1.5vw;
+  }
+  .sidebar-bar-profile-icon {
+    width: 2.9vw;
+    height: 2.9vw;
+    font-size: 1.3vw;
+  }
+
+  .top-bar{
+    height: 45px;
+    min-height: 45px;
+    max-height: 45px;
+  }
+
+  .sidebar-main-row {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+
+  /* top-bar 높이만큼 내림 */
+  margin-top: 45px;
+
+  /*남은 화면 전체를 정확히 채우도록 */
+  height: calc(100vh - 45px);
+
+  background: #f0f0f0;
+}
+
+.hamburger-btn {
+  width: 2em;
+  height: 2em;
+}
+
+ .top-bar-icon{
+    width: 28px;
+    height: 28px;
+  }
+
+  .notification-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 3px;
+  font-size: 10px;
+}
+.bookmark-shape {
+  width: 0.7vw;
+  height: 4.8vw;
+}
+}
+
+@media (max-width: 768px) {
+  .sidebar-bar {
+    width: 22vw;
+    min-width: 120px;
+  }
+  .sidebar-bar-title,
+  .sidebar-bar-label,
+  .sidebar-bar-section-label {
+    font-size: 2vw;
+  }
+  .sidebar-bar-profile-icon {
+    width: 4vw;
+    height: 4vw;
+    font-size: 1.5vw;
+  }
+
+.sidebar-bar-item,
+.sidebar-bar-section {
+  padding: 1vw 2.5vw;
+  min-height: 2.5vw;
+  font-size: 1.1vw;
+}
+.bookmark-shape {
+  width: 1vw;
+  height: 6vw;
+}
+}
+

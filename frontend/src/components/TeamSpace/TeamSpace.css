@@ -1,0 +1,289 @@
+button:focus,
+button:active {
+  outline: none !important;
+  border: none !important;
+}
+/*팀스페이스 상단 버튼*/
+.teamspace-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  background: none;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.teamspace-tabs button {
+  background: none;
+  border: none;
+  padding: 8px 18px;
+  font-size: 1rem;
+  color: #393e5e;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.teamspace-tabs button:focus,
+.teamspace-tabs button:active {
+  outline: 2px solid #fff;     /* 흰색 외곽선 표시 */
+  outline-offset: 2px;         /* 버튼 테두리와 약간 간격 */
+  box-shadow: none;            /* 기본 브라우저 포커스 그림자 제거 */
+}
+
+
+.teamspace-tabs button.active,
+.teamspace-tabs button:hover {
+  background: #7A86D8;
+  color: #fff;
+}
+
+.teamspace-todo-icon {
+  font-size: 1.2rem;
+}
+
+.teamspace-menu-icon {
+  font-size: 1.2rem;
+}
+
+/*캘린더 보드 영역*/
+.teamspace-content {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.teamspace-content--row .todo-calendar-flex {
+  flex-direction: row;
+}
+
+.todo-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.todo-calendar-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.todo-board-wrap {
+  flex: 1 1 0;
+  width:88%;
+  overflow-y: hidden;
+}
+
+.todo-calendar-wrap {
+  min-width: 340px;
+  max-width: 600px;
+  background: none;
+  margin-left: 0;
+}
+
+.panel-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #393e5e;
+  margin-bottom: 1vw;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.file-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7vw;
+  padding: 0.7vw 0;
+  border-bottom: 1px solid #eee;
+}
+.file-name {
+  flex: 1;
+  color: #393e5e;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-btn {
+  background: none;
+  border: none;
+  color: #7A86D8;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 0.3vw;
+  transition: color 0.15s;
+}
+.file-btn:hover {
+  color: #393e5e;
+}
+.file-delete-btn {
+  color: #e74c3c;
+}
+.file-delete-btn:hover {
+  color: #c0392b;
+}
+.file-empty {
+  color: #aaa;
+  font-size: 1rem;
+  padding: 2vw 0;
+}
+.file-loading {
+  color: #7A86D8;
+  font-size: 1rem;
+  padding: 2vw 0;
+  text-align: center;
+}
+
+.member-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.member-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  padding: 0.7vw 0;
+  border-bottom: 1px solid #eee;
+}
+.member-profile-box {
+  width: 2.3vw;
+  height: 2.3vw;
+  border-radius: 50%;
+  background: #e8eafd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.member-profile-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.member-profile-default {
+  color: #fff;
+  font-size: 1.2vw;
+  font-weight: bold;
+}
+.member-name {
+  flex: 1;
+  color: #393e5e;
+  font-weight: 600;
+}
+.crown {
+  margin-left: 0.5vw;
+  color: gold;
+  font-size: 1vw;
+  vertical-align: middle;
+}
+
+@media (max-width: 1024px) {
+  .todo-calendar-flex { flex-direction: column; gap: 24px; }
+  .todo-calendar-wrap { margin-left: 0; margin-top: 24px; }
+  .teamspace-tabs button, .panel-title, .file-name, .member-name { font-size: 0.8rem;}
+  .member-profile-box { width: 3vw; height: 3vw; }
+  .calendar-slide-btn.closed {height: 2.1rem!important; font-size: 0.9rem!important;}
+  .file-empty{font-size: 13px;}
+}
+@media (max-width: 780px) {
+  .teamspace-tabs button { font-size: 0.95rem; padding: 6px 8px; }
+  .todo-calendar-flex { flex-direction: column; gap: 16px; }
+  .teamspace-tabs button, .panel-title, .file-name, .member-name { font-size: 0.7rem; }
+  .teamspace-todo-icon, .teamspace-menu-icon{font-size: 1rem;}
+  .member-profile-box { width: 4vw; height: 4vw; }
+  .calendar-slide-btn.closed {height: 1.9rem!important; font-size: 0.8rem!important; margin-bottom: 15px!important;}
+  .file-empty{font-size: 13px;}
+}
+
+
+.todo-calendar-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* 캘린더 열림: 옆으로 배치 */
+.calendar-wrap-with-btn {
+  position: relative;
+  min-width: 340px;
+  max-width: 600px;
+  width: auto;
+  background: #fff;
+}
+
+.calendar-close-btn {
+  position: absolute;
+  top: 50%;
+  right: -18px;   /* 캘린더 영역 바깥으로 딱 붙는 위치 */
+  transform: translateY(-50%);
+  background: #e8eafd;
+  border: none;
+  color: #393e5e;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  width: 1rem;
+  height: 4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.calendar-close-btn:hover, 
+.calendar-slide-btn.closed:hover {
+  background: #7A86D8;
+  color: #fff;
+}
+.calendar-slide-btn.closed {
+  position: static;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  padding: 0 16px;
+  width: auto;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8eafd;
+  border:none;
+  margin-top: -15px;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-right: 4px;
+}
+
+/* 캘린더 닫힘: 버튼 아래에 투두보드 세로 배치 */
+.todo-board-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 8px;
+}
+
+.calendar-toggle-bar {
+  margin-top: 24px;  /* 원하는 만큼 조정 가능 */
+  margin-bottom: -15px;
+}

@@ -1,0 +1,195 @@
+.accept-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #7A86D8, #DFDFD2);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+/* 어두운 dim 배경 (환영 팝업용) */
+.welcome-dim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+
+  .accept-box {
+    background-color: white;
+    padding: 1.5vw 1vw;
+    border-radius: 1vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 38vw;
+    min-height: 45vh;
+    box-sizing: border-box;
+  }
+  
+  .accept-title {
+    font-size: 1.6vw;
+    margin-bottom: 1.5vw;
+    color: #333;
+    text-align: center;
+  }
+  
+  .accept-message {
+    font-size: 1.2vw;
+    margin-bottom: 2vw;
+    color: #555;
+    line-height: 1.5;
+    text-align: center;
+  }
+  
+  .accept-error {
+    color: black;
+    font-size: 1.1vw;
+    font-weight: 600;
+    margin-top: 0.5vw;
+    text-align: center;
+  }
+  
+  .accept-btn {
+    padding: 1vw 3vw;
+    font-size: 1.2vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.8vw;
+    background: linear-gradient(135deg, #D5D7E2 0%, #8A94DA 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.2);
+    transition: 0.2s ease;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .accept-btn:focus,
+  .accept-btn:active,
+  .accept-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+  
+  .accept-btn:hover {
+    opacity: 0.9;
+  }
+  
+  .welcome-popup {
+    background-color: white;
+    border-radius: 1vw;
+    padding: 2vw 2.5vw;
+    font-size: 1.2vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 40vw;
+    min-height: 50vh;
+    box-sizing: border-box;
+  }
+  
+  .welcome-popup h3 {
+    font-size: 1.5vw;
+    margin-bottom: 0;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .welcome-popup p {
+    font-size: 1.2vw;
+    margin-bottom: 1vw;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .welcome-desc {
+    padding: 1vw 0.8vw;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 1vw;
+    font-size: 1.1vw;
+    line-height: 1.6;
+    min-height: 30vh;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+  }
+  
+  .welcome-close-fixed {
+    position: absolute;
+    top: 0rem;       /* 적당히 조절 */
+    right: -0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #555;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  .welcome-close-fixed:focus {
+    outline: none;
+  }
+
+  
+  /* 반응형 */
+  @media (max-width: 768px) {
+    .accept-box {
+      width: 90vw;
+      padding: 5vw 4vw;
+      min-height: 55vh;
+    }
+  
+    .accept-title {
+      font-size: 5vw;
+    }
+  
+    .accept-message {
+      font-size: 3.5vw;
+    }
+  
+    .accept-error {
+      font-size: 3.5vw;
+    }
+  
+    .accept-btn {
+      font-size: 3.5vw;
+      padding: 2vw 5vw;
+    }
+  
+    .welcome-popup {
+      padding: 4vw 5vw;
+      min-height: 50vh;
+      max-width: 90vw;
+    }
+  
+    .welcome-popup h3 {
+      font-size: 4vw;
+    }
+  
+    .welcome-popup p {
+      font-size: 3.5vw;
+    }
+  
+    .welcome-desc {
+      font-size: 3vw;
+      padding: 3vw 4vw;
+      min-height: 35vh;
+    }
+  
+    .welcome-close {
+      font-size: 5vw;
+    }
+  }  

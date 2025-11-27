@@ -1,0 +1,73 @@
+.main-intro-box {
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+  .main-intro-box h1 {
+    font-size: 1.8vw;
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    gap: 0.5vw;
+    flex-wrap: wrap;
+    align-items: center; 
+  }
+  
+  
+  .main-intro-box p {
+    font-size: 1.3vw;
+    color: #555;
+    margin-top: 2vw;
+  }
+  
+  .circle-plus-button { 
+    color: #7A86D8;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 23px;
+    height: 23px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  
+
+
+  @media (max-width: 1024px) {
+    .circle-plus-button {
+      width: 2.3vw;
+      height: 2.3vw;
+      
+    }
+  
+    .main-intro-box h1 {
+      font-size: 2.5vw;
+    }
+  
+    .main-intro-box p {
+      font-size: 2vw;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .circle-plus-button {
+      width: 19px;
+      height: 19px;
+      font-size: 15px;
+    }
+  
+    .main-intro-box h1 {
+      font-size: 2.3vw;
+    }
+  
+    .main-intro-box p {
+      font-size: 2vw;
+    }
+  }
+  
+
+  
+  
