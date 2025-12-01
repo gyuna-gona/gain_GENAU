@@ -22,7 +22,8 @@ const DetailTodoPopup = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState(null);
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [submittedFiles, setSubmittedFiles] = useState([]);
 
   const [convertProgress, setConvertProgress] = useState(0);
@@ -55,6 +56,7 @@ const DetailTodoPopup = ({
     return () => clearTimeout(t);
   }, [uploadError]);
 
+  // 기존 제출된 파일 목록 불러오기
   useEffect(() => {
     const fetchSubmittedFiles = async () => {
       if (!detailTodo?.todoId) return;
@@ -376,7 +378,7 @@ const DetailTodoPopup = ({
                   <span className="file-prefix">
                     <LuPaperclip />
                   </span>
-                  
+
                   <span className="file-name">{file.fileName}</span>
 
                   <div className="file-actions">
