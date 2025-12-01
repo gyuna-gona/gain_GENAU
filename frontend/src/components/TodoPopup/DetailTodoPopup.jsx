@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import "./DetailTodo.css";
 import { FaRegCalendar } from "react-icons/fa";
@@ -56,35 +56,37 @@ const DetailTodoPopup = ({
     return () => clearTimeout(t);
   }, [uploadError]);
 
-  // 기존 제출된 파일 목록 불러오기
-  useEffect(() => {
-    const fetchSubmittedFiles = async () => {
-      if (!detailTodo?.todoId) return;
+  // (12.01 수정됨) 기존 제출된 파일 목록 불러오기
+  const fetchFileList = useCallback(async () => {
+    if (!detailTodo?.todoId) return;
 
-      try {
-        const res = await fetch(
-          `${API_BASE}/todos/${detailTodo.todoId}/files`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setSubmittedFiles(data);
-        } else if (Array.isArray(data?.files)) {
-          setSubmittedFiles(data.files);
+    try {
+      const res = await fetch(
+        `${API_BASE}/todos/${detailTodo.todoId}/files`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      } catch (e) {
-        console.error("파일 목록 조회 실패:", e);
-      }
-    };
+      );
 
-    fetchSubmittedFiles();
+      if (!res.ok) return;
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setSubmittedFiles(data);
+       } else if (Array.isArray(data?.files)) {
+        setSubmittedFiles(data.files);
+       }
+    } catch (e) {
+      console.error("파일 목록 조회 실패", e);
+    }
   }, [detailTodo?.todoId]);
+
+  // fetchFileList 호출
+  useEffect(() => {
+    fetchFileList();
+  }, [fetchFileList]);
 
   // 담당자 체크
   const hasAssignees =
@@ -215,6 +217,9 @@ const DetailTodoPopup = ({
       // 변환 실패해도 업로드는 성공했기 때문에 중단하지 않음
       setUploadError("변환 실패: " + err.message);
     }
+
+    // (12.01 수정됨) 변환 완료 후 파일 목록 새로고침
+    await fetchFileList();
 
     // 3) 갱신 + UI 처리
     try {
