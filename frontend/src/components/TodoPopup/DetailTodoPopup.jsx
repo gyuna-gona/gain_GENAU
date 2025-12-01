@@ -49,7 +49,7 @@ const DetailTodoPopup = ({
     return () => clearInterval(progressRef.current);
   }, [isConvertingNow]);
 
-  // 에러 자동 제거
+  // 에러 메세지 자동 제거
   useEffect(() => {
     if (!uploadError) return;
     const t = setTimeout(() => setUploadError(""), 5000);
@@ -191,48 +191,53 @@ const DetailTodoPopup = ({
         const originalFile = selectedFiles[i].file;
         const currentExt = originalFile.name.split(".").pop().toLowerCase();
 
-        if (!requiredExt || currentExt === requiredExt) continue;
+        // 변환이 필요한 경우에만 API 호출
+        if (requiredExt && currentExt !== requiredExt) {
+          const convertForm = new FormData();
+          
+          // 파일을 다시 보내지 않고 targetFormat만 보내도록 수정
+          // 이미 업로드된 파일을 변환하는 것이므로 파일 본문은 불필요
+          // convertForm.append("file", originalFile); <--- 삭제함
+          convertForm.append("file", originalFile);
+          convertForm.append("targetFormat", requiredExt);
 
-        const convertForm = new FormData();
-        convertForm.append("file", originalFile);        
-        convertForm.append("targetFormat", requiredExt); 
+          const convertRes = await fetch(
+            `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}/convert`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: convertForm,
+            }
+          );
 
-        const convertRes = await fetch(
-          `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}/convert`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: convertForm,
-          }
-        );
-
-        if (!convertRes.ok) {
+          if (!convertRes.ok) {
           const txt = await convertRes.text();
           throw new Error(txt || "변환 실패");
+          }
         }
       }
     } catch (err) {
       // 변환 실패해도 업로드는 성공했기 때문에 중단하지 않음
       setUploadError("변환 실패: " + err.message);
+    } finally {
+      await fetchFileList();
+
+      try {
+        if (onRefreshDetail) await onRefreshDetail();
+      } catch {}
+
+      setIsUploading(false);
+
+      // 성공적으로 완료되었을 때만 초기화
+      if (!uploadError) {
+        setSelectedFiles([]);
+        setConvertProgress(100);
+        setIsConversionFinished(true);
+        onClose();
+      }
     }
-
-    // (12.01 수정됨) 변환 완료 후 파일 목록 새로고침
-    await fetchFileList();
-
-    // 3) 갱신 + UI 처리
-    try {
-      if (onRefreshDetail) await onRefreshDetail();
-    } catch {}
-
-    setUploadSuccess("파일 제출 및 변환 성공");
-    setSelectedFiles([]);
-    setConvertProgress(100);
-    setIsConversionFinished(true);
-    setIsUploading(false);
-
-    onClose();
   };
   // ============================================================
 
