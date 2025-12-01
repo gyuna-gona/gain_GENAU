@@ -22,7 +22,9 @@ const DetailTodoPopup = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [submittedFiles, setSubmittedFiles] = useState([]);
+
   const [convertProgress, setConvertProgress] = useState(0);
   const [isConvertingNow, setIsConvertingNow] = useState(false);
   const [isConversionFinished, setIsConversionFinished] = useState(false);
@@ -53,119 +55,201 @@ const DetailTodoPopup = ({
     return () => clearTimeout(t);
   }, [uploadError]);
 
+  useEffect(() => {
+    const fetchSubmittedFiles = async () => {
+      if (!detailTodo?.todoId) return;
+
+      try {
+        const res = await fetch(
+          `${API_BASE}/todos/${detailTodo.todoId}/files`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setSubmittedFiles(data);
+        } else if (Array.isArray(data?.files)) {
+          setSubmittedFiles(data.files);
+        }
+      } catch (e) {
+        console.error("파일 목록 조회 실패:", e);
+      }
+    };
+
+    fetchSubmittedFiles();
+  }, [detailTodo?.todoId]);
+
+  // 담당자 체크
+  const hasAssignees =
+    Array.isArray(detailTodo?.assignees) && detailTodo.assignees.length > 0;
+
+  const isAssignee =
+    hasAssignees &&
+    detailTodo.assignees.some(
+      (id) => String(id) === String(currentUserId)
+    );
+
+  // 파일 업로드 가능 여부 확인
+  const canUpload = !hasAssignees || isAssignee;
+  
   // 파일 선택
   const handleFileSelect = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setSelectedFile(file);
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
     setIsConversionFinished(false);
 
-    const requiredExt = detailTodo.fileForm?.toLowerCase();
-    const currentExt = file.name.split(".").pop()?.toLowerCase();
+    const requiredExt = detailTodo.fileForm?.toLowerCase() || null;
 
-    if (requiredExt && currentExt !== requiredExt) {
-      handleAutoConvert(file, requiredExt);
-    } else {
-      setIsConversionFinished(true);
-      setConvertProgress(100);
-    }
-  };
+    const newItems = files.map((file) => {
+      const currentExt = file.name.split(".").pop()?.toLowerCase() || "";
+      const needsConvert =
+        requiredExt && currentExt && currentExt !== requiredExt;
 
-  // 자동 변환
-  const handleAutoConvert = async (file, targetFormat) => {
-    setIsConvertingNow(true);
-    setConvertProgress(0);
-    setIsConversionFinished(false);
+      return { file, needsConvert };
+    });
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("targetFormat", targetFormat);
+    setSelectedFiles((prev) => [...prev, ...newItems]);
 
-      const res = await fetch(`${API_BASE}/todos/${detailTodo.todoId}/convert`, {
-        method: "POST",
-        body: formData,
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      if (!res.ok) throw new Error("변환 실패");
-      const blob = await res.blob();
-      if (blob.size === 0) throw new Error("빈 파일 반환됨");
-
-      setTimeout(() => {
+    if (requiredExt) {
+      const anyNeed = newItems.some((f) => f.needsConvert);
+      if (anyNeed) {
+        setConvertProgress(0);
+        setIsConvertingNow(true);
+      } else {
         setConvertProgress(100);
-        setIsConvertingNow(false);
         setIsConversionFinished(true);
-        const convertedFile = new File(
-          [blob],
-          `${file.name.split(".")[0]}_converted.${targetFormat}`,
-          { type: blob.type }
-        );
-        setSelectedFile(convertedFile);
-      }, 500);
-    } catch (err) {
-      clearInterval(progressRef.current);
-      setConvertProgress(0);
-      setIsConvertingNow(false);
-      setIsConversionFinished(false);
-
-      const retry = window.confirm("파일 변환에 실패했습니다. 다시 시도하시겠습니까?");
-      if (retry) setTimeout(() => handleAutoConvert(file, targetFormat), 1000);
-      else {
-        setSelectedFile(null);
-        const fileInput = document.querySelector('input[type="file"]');
-        if (fileInput) fileInput.value = "";
       }
+    } else {
+      setConvertProgress(100);
+      setIsConversionFinished(true);
     }
   };
 
-  // 업로드
+  // ============================================================
+  // 파일 업로드 및 변환(변환 필요한 파일만 API 호출)
   const handleFileUpload = async () => {
-    const fileToUpload = selectedFile || uploadedFile;
-    if (!fileToUpload || !detailTodo) return;
+    if (!detailTodo || selectedFiles.length === 0) return;
+
     setIsUploading(true);
     setUploadError("");
     setUploadSuccess("");
 
-    const formData = new FormData();
-    formData.append("file", fileToUpload);
+    const requiredExt = detailTodo.fileForm?.toLowerCase() || null;
+
+    // 1) 먼저 원본 파일 제출 → fileId 확보
+    const submitForm = new FormData();
+    selectedFiles.forEach((item) => {
+      submitForm.append("file", item.file);
+    });
+
+    let uploadedFiles = [];
 
     try {
-      const response = await fetch(
-        `${API_BASE}/todos/${detailTodo.todoId}/submit?teammatesId=${currentUserId}`,
+      const res = await fetch(
+        `${API_BASE}/todos/${detailTodo.todoId}/submit`,
         {
           method: "POST",
-          body: formData,
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          body: submitForm,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
-      if (!response.ok) throw new Error("파일 업로드 실패");
-      setUploadSuccess("파일이 성공적으로 업로드되었습니다.");
-      if (onRefreshDetail) await onRefreshDetail();
-      onClose();
-    } catch (error) {
-      setUploadError(`파일 업로드 실패: ${error.message}`);
-    } finally {
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || "업로드 실패");
+      }
+
+      const data = await res.json();
+
+      uploadedFiles = Array.isArray(data?.uploadedFiles)
+        ? data.uploadedFiles
+        : data;
+    } catch (err) {
+      setUploadError("업로드 실패: " + err.message);
       setIsUploading(false);
+      return;
     }
+
+    // 2) 업로드된 파일 중 확장자가 다른 것만 convert API 호출
+    try {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        const fileInfo = uploadedFiles[i];
+        const fileId = fileInfo.id;
+
+        const originalFile = selectedFiles[i].file;
+        const currentExt = originalFile.name.split(".").pop().toLowerCase();
+
+        if (!requiredExt || currentExt === requiredExt) continue;
+
+        const convertForm = new FormData();
+        convertForm.append("file", originalFile);        
+        convertForm.append("targetFormat", requiredExt); 
+
+        const convertRes = await fetch(
+          `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}/convert`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: convertForm,
+          }
+        );
+
+        if (!convertRes.ok) {
+          const txt = await convertRes.text();
+          throw new Error(txt || "변환 실패");
+        }
+      }
+    } catch (err) {
+      // 변환 실패해도 업로드는 성공했기 때문에 중단하지 않음
+      setUploadError("변환 실패: " + err.message);
+    }
+
+    // 3) 갱신 + UI 처리
+    try {
+      if (onRefreshDetail) await onRefreshDetail();
+    } catch {}
+
+    setUploadSuccess("파일 제출 및 변환 성공");
+    setSelectedFiles([]);
+    setConvertProgress(100);
+    setIsConversionFinished(true);
+    setIsUploading(false);
+
+    onClose();
   };
+  // ============================================================
 
   // 다운로드
-  const handleFileDownload = async () => {
+  const handleDownloadFile = async (fileId, fileName) => {
+    if (!detailTodo) return;
     try {
       const response = await fetch(
-        `${API_BASE}/todos/${detailTodo.todoId}/download`,
+        `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}/download`,
         {
           method: "GET",
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
       if (!response.ok) throw new Error("파일 다운로드 실패");
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+
       link.href = url;
-      link.download = getFileName();
+      link.download = fileName || "download";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -175,58 +259,32 @@ const DetailTodoPopup = ({
     }
   };
 
-  const handleFileDelete = async () => {
-  if (!hasUploadedFile) return alert("삭제할 파일이 없습니다.");
-  if (!window.confirm(`기존 파일 "${getFileName()}"을 삭제하시겠습니까?`)) return;
+  // 파일 삭제
+  const handleDeleteFile = async (fileId) => {
+    if (!detailTodo) return;
+    if (!window.confirm("이 파일을 삭제하시겠습니까?")) return;
 
-  try {
-    const response = await fetch(
-      `${API_BASE}/todos/${detailTodo.todoId}/upload-file`,
-      {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    try {
+      const response = await fetch(
+        `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "파일 삭제 실패");
       }
-    );
-    if (!response.ok) throw new Error("파일 삭제 실패");
 
-    // 전체 리렌더링 대신 내부 상태만 변경
-    detailTodo.uploadedFilePath = null;
-    detailTodo.fileName = null;
-
-    // 파일 섹션에 즉시 반영되도록 로컬 상태 변경
-    setTimeout(() => setUploadSuccess(""), 2000);
-  } catch (error) {
-    setUploadError(`파일 삭제 실패: ${error.message}`);
-  }
-};
-
-
-  const hasUploadedFile = (() => {
-    const fields = ["uploadedFilePath", "fileName", "file_path", "fileUrl"];
-    return fields.some((k) => !!detailTodo?.[k]);
-  })();
-
-  const getFileName = () => {
-    const fileFields = [
-      "uploadedFileName",
-      "fileName",
-      "file_name",
-      "uploadedFilePath",
-      "filePath",
-    ];
-    for (const f of fileFields) {
-      const v = detailTodo?.[f];
-      if (v) return String(v).split(/[\\/]/).pop();
+      setSubmittedFiles((prev) => prev.filter((f) => f.id !== fileId));
+    } catch (error) {
+      setUploadError(`파일 삭제 실패: ${error.message}`);
     }
-    return "알 수 없는 파일";
   };
-
-  const assignees = detailTodo.assignees || [];
-  const hasAssignees = assignees.length > 0;
-
-  const canUpload = hasAssignees
-    ? assignees.some((id) => String(id) === String(currentUserId))
-    : true;
 
   if (!detailTodo) return null;
 
@@ -237,6 +295,7 @@ const DetailTodoPopup = ({
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
+  
   const assigneeDisplay =
     namesArr.length === 0
       ? "담당자 없음"
@@ -244,25 +303,41 @@ const DetailTodoPopup = ({
       ? namesArr[0]
       : `${namesArr[0]} 외 ${namesArr.length - 1}명`;
 
+  const canDeleteExisting =
+    (hasAssignees && isAssignee) || !hasAssignees;
+
+
+  // DetailTodoPopup 내용물 구성
   const popupContent = (
-    <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="detail-todo-popup" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="overlay"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        className="detail-todo-popup"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h3>{detailTodo.todoTitle}</h3>
+
         <p className="team-category">
           {teamName || detailTodo.teamName || "팀명 없음"} :{" "}
           {detailTodo.categoryName}
         </p>
+
         <div className="detail-title">할 일 상세</div>
+
         <div className="container">
           <div className="left">
             <div className="row">
               <FaRegCalendar className="detail-icon" />
               {detailTodo.dueDate}
             </div>
+
             <div className="row">
               <LuUser className="detail-icon" />
               {assigneeDisplay}
             </div>
+
             <div className="row">
               <TbCheckbox className="detail-icon" />
               <span
@@ -276,7 +351,9 @@ const DetailTodoPopup = ({
           </div>
 
           <div className="right">
-            <div className="detail-todo-content">{detailTodo.todoDes}</div>
+            <div className="detail-todo-content">
+              {detailTodo.todoDes}
+            </div>
           </div>
         </div>
 
@@ -291,131 +368,206 @@ const DetailTodoPopup = ({
           </span>
         </p>
 
-        {/*기존 업로드 파일이 있을 때 */}
         <div className="file-section">
-        {hasUploadedFile && (
-            <div className="file-info">
-            <div className="file-details">
-                <span className="file-name">{getFileName()}</span>
-                <div className="file-actions">
-                <button
-                    className="icon-download"
-                    onClick={handleFileDownload}
-                    title="다운로드"
-                    onMouseDown={(e) => e.preventDefault()}
-                >
-                    <LuDownload />
-                </button>
-                {canUpload && (
+          {submittedFiles.length > 0 &&
+            submittedFiles.map((file) => (
+              <div key={file.id} className="file-info">
+                <div className="file-details">
+                  <span className="file-prefix">
+                    <LuPaperclip />
+                  </span>
+                  
+                  <span className="file-name">{file.fileName}</span>
+
+                  <div className="file-actions">
                     <button
-                    className="icon-delete"
-                    onClick={handleFileDelete}
-                    title="삭제"
-                    onMouseDown={(e) => e.preventDefault()}
+                      className="icon-download"
+                      onClick={() =>
+                        handleDownloadFile(file.id, file.fileName)
+                      }
+                      title="다운로드"
+                      onMouseDown={(e) => e.preventDefault()}
                     >
-                    <LuTrash2 />
+                      <LuDownload />
                     </button>
-                )}
+
+                    {canDeleteExisting && (
+                      <button
+                        className="icon-delete"
+                        onClick={() =>
+                          handleDeleteFile(file.id)
+                        }
+                        title="삭제"
+                        onMouseDown={(e) => e.preventDefault()}
+                      >
+                        <LuTrash2 />
+                      </button>
+                    )}
+                  </div>
                 </div>
-            </div>
-            </div>
-        )}
+              </div>
+            ))}
         </div>
 
-
-        {/* 담당자일 때 업로드 영역 */}
         {canUpload ? (
           <div className="upload-section">
             <input
               type="file"
-              accept={
-                detailTodo.fileForm
-                  ? `.${detailTodo.fileForm.toLowerCase()}`
-                  : "*/*"
-              }
+              multiple
+              accept="*/*"
               onChange={handleFileSelect}
               disabled={isUploading}
             />
 
-        {selectedFile && (
-        <div className="upload-preview">
-            {/* 📎 클립 아이콘 + 파일명 */}
-            <span className="file-prefix">
-            <LuPaperclip />
-            </span>
-            <span className="file-preview-name">{selectedFile.name}</span>
-            <span>({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+            {selectedFiles.length > 0 && (
+              <div className="upload-preview-list">
+                {selectedFiles.map((item, index) => {
+                  const file = item.file;
+                  const requiredExt =
+                    detailTodo.fileForm?.toLowerCase() || "";
+                  const currentExt =
+                    file.name.split(".").pop()?.toLowerCase() ||
+                    "";
+                  const needsConvert =
+                    requiredExt &&
+                    currentExt &&
+                    currentExt !== requiredExt;
 
-            {(() => {
-            if (!detailTodo.fileForm) return null;
-            const requiredExt = detailTodo.fileForm.toLowerCase();
-            const currentExt = selectedFile.name.split(".").pop()?.toLowerCase();
-
-            if (isConvertingNow && !isConversionFinished) {
-                return (
-                <span className="format-check-inline">
-                    <div className="conversion-bar">
+                  return (
                     <div
-                        className="conversion-bar-fill"
-                        style={{ width: `${convertProgress}%` }}
-                    />
-                    </div>
-                </span>
-                );
-            }
-
-            if (isConversionFinished || currentExt === requiredExt) {
-                return (
-                <div className="approval-wrapper">
-                    <div className="approval-group">
-                    <p className="approved">승인</p>
-                    </div>
-                    <button
-                    className="file-remove"
-                    onClick={() => {
-                        setSelectedFile(null);
-                        setConvertProgress(0);
-                        setIsConversionFinished(false);
-                        const fileInput = document.querySelector('input[type="file"]');
-                        if (fileInput) fileInput.value = "";
-                    }}
+                      className="upload-preview"
+                      key={`${file.name}-${index}`}
                     >
-                    ✖
-                    </button>
-                </div>
-                );
-            }
+                      <span className="file-prefix">
+                        <LuPaperclip />
+                      </span>
+                      <span className="file-preview-name">
+                        {file.name}
+                      </span>
+                      <span>
+                        ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
 
-            return null;
-            })()}
-        </div>
-        )}
+                      {detailTodo.fileForm &&
+                        (() => {
+                          if (needsConvert) {
+                            if (
+                              isConvertingNow &&
+                              !isConversionFinished
+                            ) {
+                              return (
+                                <span className="format-check-inline">
+                                  <div className="conversion-bar">
+                                    <div
+                                      className="conversion-bar-fill"
+                                      style={{
+                                        width: `${convertProgress}%`,
+                                      }}
+                                    />
+                                  </div>
+                                </span>
+                              );
+                            }
 
+                            if (isConversionFinished) {
+                              return (
+                                <div className="approval-wrapper">
+                                  <div className="approval-group">
+                                    <p className="approved">
+                                      승인
+                                    </p>
+                                  </div>
+                                  <button
+                                    className="file-remove"
+                                    onClick={() => {
+                                      setSelectedFiles(
+                                        (prev) =>
+                                          prev.filter(
+                                            (_, i) => i !== index
+                                          )
+                                      );
+                                    }}
+                                  >
+                                    ✖
+                                  </button>
+                                </div>
+                              );
+                            }
+                          }
 
-            {uploadError && <div className="message error">{uploadError}</div>}
+                          if (!needsConvert) {
+                            return (
+                              <div className="approval-wrapper">
+                                <div className="approval-group">
+                                  <p className="approved">승인</p>
+                                </div>
+                                <button
+                                  className="file-remove"
+                                  onClick={() => {
+                                    setSelectedFiles((prev) =>
+                                      prev.filter(
+                                        (_, i) => i !== index
+                                      )
+                                    );
+                                  }}
+                                >
+                                  ✖
+                                </button>
+                              </div>
+                            );
+                          }
+
+                          return null;
+                        })()}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {uploadError && (
+              <div className="message error">{uploadError}</div>
+            )}
             {uploadSuccess && (
-              <div className="message success">{uploadSuccess}</div>
+              <div className="message success">
+                {uploadSuccess}
+              </div>
             )}
 
             <div className="popup-buttons">
               <button
                 className="btn-submit"
                 onClick={handleFileUpload}
-                disabled={isUploading || isConvertingNow}
+                disabled={
+                  isUploading || selectedFiles.length === 0
+                }
               >
                 {isUploading ? "업로드 중..." : "제출"}
               </button>
-              <button className="btn-cancel" onClick={onClose}>
+              <button
+                className="btn-cancel"
+                onClick={async () => {
+                  if (onRefreshDetail) await onRefreshDetail();
+                  onClose();
+                }}
+              >
                 닫기
               </button>
+
             </div>
           </div>
         ) : (
-          // 권한 없는 사용자일 때 닫기 버튼 표시
           <div className="popup-buttons">
-            <button className="btn-cancel full-width" onClick={onClose}>
+            <button
+              className="btn-cancel full-width"
+              onClick={async () => {
+                if (onRefreshDetail) await onRefreshDetail();
+                onClose();
+              }}
+            >
               닫기
             </button>
+
           </div>
         )}
       </div>
