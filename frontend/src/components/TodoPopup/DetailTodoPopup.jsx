@@ -175,7 +175,10 @@ const DetailTodoPopup = ({
 
       uploadedFiles = Array.isArray(data?.uploadedFiles)
         ? data.uploadedFiles
-        : data;
+        : Array.isArray(data) ? data : [];
+
+      console.log("📂 서버 업로드 결과:", uploadedFiles);
+
     } catch (err) {
       setUploadError("업로드 실패: " + err.message);
       setIsUploading(false);
@@ -188,18 +191,38 @@ const DetailTodoPopup = ({
         const fileInfo = uploadedFiles[i];
         const fileId = fileInfo.id;
 
-        const originalFile = selectedFiles[i].file;
+        // ✅ [핵심 수정] 서버 응답에서 파일명을 찾기 위해 여러 필드를 다 검사합니다.
+        const targetFileName = 
+          fileInfo.fileName || 
+          fileInfo.uploadedFileName || 
+          fileInfo.originalFileName || 
+          fileInfo.name;
+
+        // 1순위: 파일 이름이 똑같은 것을 찾습니다.
+        let matchedItem = selectedFiles.find(
+          (item) => item.file.name === targetFileName
+        );
+
+        // 2순위: 이름으로 못 찾았다면, 순서(Index)를 믿고 가져옵니다. (Fallback)
+        if (!matchedItem && selectedFiles[i]) {
+           console.warn(`파일명을 찾을 수 없어 순서(${i})로 매칭합니다.`, targetFileName);
+           matchedItem = selectedFiles[i];
+        }
+
+        // 그래도 없으면 건너뜁니다.
+        if (!matchedItem) continue;
+
+        const originalFile = matchedItem.file;
         const currentExt = originalFile.name.split(".").pop().toLowerCase();
 
         // 변환이 필요한 경우에만 API 호출
         if (requiredExt && currentExt !== requiredExt) {
           const convertForm = new FormData();
           
-          // 파일을 다시 보내지 않고 targetFormat만 보내도록 수정
-          // 이미 업로드된 파일을 변환하는 것이므로 파일 본문은 불필요
-          // convertForm.append("file", originalFile); <--- 삭제함
           convertForm.append("file", originalFile);
           convertForm.append("targetFormat", requiredExt);
+
+          console.log(`🔄 변환 요청 전송: ${originalFile.name} (ID: ${fileId}) -> ${requiredExt}`);
 
           const convertRes = await fetch(
             `${API_BASE}/todos/${detailTodo.todoId}/files/${fileId}/convert`,
@@ -214,11 +237,14 @@ const DetailTodoPopup = ({
 
           if (!convertRes.ok) {
           const txt = await convertRes.text();
-          throw new Error(txt || "변환 실패");
+          throw new Error(`변환 실패 (파일: ${originalFile.name}): ${txt}`);
           }
         }
       }
+      setUploadSuccess("파일 제출 및 변환 성공");
     } catch (err) {
+      console.error(err);
+
       // 변환 실패해도 업로드는 성공했기 때문에 중단하지 않음
       setUploadError("변환 실패: " + err.message);
     } finally {
